@@ -1,5 +1,5 @@
 module.exports = function ( RED ) {
-	function deviceMgr( config ) {
+	function deviceMgrNode( config ) {
 		RED.nodes.createNode( this, config );
 		var node = this;
 		node.on( 'input', function ( msg ) {
@@ -39,7 +39,7 @@ module.exports = function ( RED ) {
 
 			} );
 			node.send( msg );
-		} );
+		}
 	}
-	RED.nodes.registerType( "lower-case", LowerCaseNode );
+	RED.nodes.registerType( "device-mgr", deviceMgrNode );
 }
