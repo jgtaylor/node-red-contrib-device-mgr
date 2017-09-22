@@ -14,7 +14,7 @@
 		"iot"
 	],
 	"author": "jgtaylor",
-	"license": "ISC",
+	"license": "MIT",
 	"bugs": {
 		"url": "https://github.com/jgtaylor/node-red-contrib-device-mgr/issues"
 	},
