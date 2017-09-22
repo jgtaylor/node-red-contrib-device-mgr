@@ -2,7 +2,7 @@
 	"name": "node-red-contrib-device-mgr",
 	"version": "0.0.1",
 	"description": "Flow level device manager",
-	"main": "index.js",
+	"main": "device-mgr.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
