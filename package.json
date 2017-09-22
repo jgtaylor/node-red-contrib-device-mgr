@@ -1,5 +1,5 @@
 {
-	"name": "device-mgr",
+	"name": "node-red-contrib-device-mgr",
 	"version": "0.0.1",
 	"description": "Flow level device manager",
 	"main": "index.js",
@@ -19,7 +19,6 @@
 		"url": "https://github.com/jgtaylor/node-red-contrib-device-mgr/issues"
 	},
 	"homepage": "https://github.com/jgtaylor/node-red-contrib-device-mgr#readme",
-	"name": "node-red-contrib-device-mgr",
 	"node-red": {
 		"nodes": {
 			"lower-case": "device-mgr.js"
