@@ -21,7 +21,7 @@
 	"homepage": "https://github.com/jgtaylor/node-red-contrib-device-mgr#readme",
 	"node-red": {
 		"nodes": {
-			"lower-case": "device-mgr.js"
+			"device-mgr": "device-mgr.js"
 		}
 	}
 }
