@@ -4,6 +4,8 @@ module.exports = function ( RED ) {
 			RED.nodes.createNode( this, config );
 			var node = this;
 			node.on( "input", function ( msg ) {
+				var flow = this.context()
+					.flow;
 				if ( !flow.get( "devicesConfig" ) ) {
 					flow.set( "devicesConfig", [] );
 				}
