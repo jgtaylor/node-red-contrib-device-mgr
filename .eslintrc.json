@@ -26,5 +26,8 @@
 		"space-in-parens": ["error", "always"],
 		"no-console": 0,
 		"no-unused-vars": 1
+	},
+	"globals": {
+		"flow": false
 	}
 }
