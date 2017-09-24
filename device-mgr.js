@@ -19,23 +19,26 @@ module.exports = function ( RED, deviceManager ) {
 		function ( config ) {
 			RED.nodes.createNode( this, config );
 
+			var node = this;
+			var flow = node.context()
+				.flow;
 			let dm = new events.EventEmitter();
 			dm.devicesList = [];
 			dm.addDevice = ( devConfig ) => {
-				if ( this.verifyDevice( devConfig ) ) {
+				if ( node.verifyDevice( devConfig ) ) {
 					// maybe put subscribe stuff here...?
 					if ( !devConfig.device ) {
 						devConfig.device = guid();
 					}
-					this.log( "info", "Adding: " + devConfig.device );
-					this.devicesList.push( devConfig );
+					node.log( "info", "Adding: " + devConfig.device );
+					node.devicesList.push( devConfig );
 					return true;
 				}
 				return false;
 			};
 			// verify a supplied configuration for a devicesConfig
 			dm.verifyDevice = ( devConfig ) => {
-				let exists = this.devicesList.find( function ( sourceDev ) {
+				let exists = node.devicesList.find( function ( sourceDev ) {
 					return devConfig.device === sourceDev.device;
 				} );
 				// false means it exists, true: it's safe to insert.
@@ -44,14 +47,14 @@ module.exports = function ( RED, deviceManager ) {
 
 			// delete a device from the deviceManager
 			dm.removeDevice = ( deviceID ) => {
-				this.devicesList = this.devicesList.filter( function ( el ) {
+				node.devicesList = node.devicesList.filter( function ( el ) {
 					return el.device !== deviceID;
 				} );
 			};
 
 			//query a device
 			dm.queryDevice = ( deviceID ) => {
-				let d = this.devicesList.filter( ( el ) => {
+				let d = node.devicesList.filter( ( el ) => {
 					return el.device === deviceID;
 				} );
 				if ( d.length === 1 ) {
@@ -59,9 +62,6 @@ module.exports = function ( RED, deviceManager ) {
 				}
 			};
 
-			var node = this;
-			var flow = node.context()
-				.flow;
 			if ( !flow.get( "deviceManager" ) ) {
 				flow.set( "deviceManager", dm );
 			}
