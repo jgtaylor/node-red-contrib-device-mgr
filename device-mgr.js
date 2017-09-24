@@ -27,14 +27,14 @@ module.exports = function ( RED ) {
 						devConfig.device = guid();
 					}
 					node.log( "info", "Adding: " + devConfig.device );
-					return deviceManager.devicesList.push( devConfig ) ? true : false;
+					return node.deviceManager.devicesList.push( devConfig ) ? true : false;
 				}
 				return false;
 			}
 
 			// verify a supplied configuration for a devicesConfig
 			function verifyDevice( devConfig ) {
-				let exists = deviceManager.find( function ( sourceDev ) {
+				let exists = node.deviceManager.find( function ( sourceDev ) {
 					return devConfig.device === sourceDev.device;
 				} );
 				return exists ? exists : false;
@@ -42,7 +42,7 @@ module.exports = function ( RED ) {
 
 			// delete a device from the deviceManager
 			function removeDevice( deviceID ) {
-				deviceManager.devicesList = deviceManager.devicesList.filter( function ( el ) {
+				node.deviceManager.devicesList = node.deviceManager.devicesList.filter( function ( el ) {
 					return el.device !== deviceID;
 				} );
 			}
@@ -52,9 +52,9 @@ module.exports = function ( RED ) {
 			if ( !flow.get( "deviceManager" ) ) {
 				let dm = {
 					devicesList: [],
-					addDevice: addDevice,
-					removeDevice: removeDevice,
-					verifyDevice: verifyDevice
+					addDevice: node.addDevice,
+					removeDevice: node.removeDevice,
+					verifyDevice: node.verifyDevice
 				};
 				util.inherits( dm, events.EventEmitter );
 				flow.set( "deviceManager", dm );
@@ -103,7 +103,7 @@ module.exports = function ( RED ) {
 				let L = msg.payload[ 1 ];
 				msg.payload.length = 0;
 				L.forEach( function ( target ) {
-					if ( addDevice( target ) ) {
+					if ( deviceManager.addDevice( target ) ) {
 						msg.payload.push( {
 							action: "add",
 							result: true,
