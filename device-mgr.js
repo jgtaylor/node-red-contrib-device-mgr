@@ -18,12 +18,7 @@ module.exports = function ( RED, deviceManager ) {
 	RED.nodes.registerType( "device-mgr",
 		function ( config ) {
 			RED.nodes.createNode( this, config );
-			var node = this;
-			var flow = node.context()
-				.flow;
-			if ( !flow.get( "deviceManager" ) ) {
-				flow.set( "deviceManager", deviceManager );
-			}
+
 			let dm = new events.EventEmitter();
 			dm.devicesList = [];
 			dm.addDevice = ( devConfig ) => {
@@ -63,6 +58,13 @@ module.exports = function ( RED, deviceManager ) {
 					return d[ 0 ];
 				}
 			};
+
+			var node = this;
+			var flow = node.context()
+				.flow;
+			if ( !flow.get( "deviceManager" ) ) {
+				flow.set( "deviceManager", dm );
+			}
 			/**
 							"device": "dccbaa81-b2e4-46e4-a2f4-84d398dd86e3",
 							"type": "virtual",
