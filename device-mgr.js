@@ -90,6 +90,9 @@ module.exports = function ( RED ) {
 
 			// currently no path to delete devices.
 			node.on( "input", function ( msg ) {
+				var node = this;
+				var flow = node.context()
+					.flow;
 				var deviceManager = flow.get( "deviceManager" );
 				console.log( this );
 				let L = msg.payload[ 1 ];
