@@ -50,11 +50,7 @@ module.exports = function ( RED ) {
 					} );
 				};
 				flow.set( "deviceManager", dm );
-			} else {
-				var deviceManager = flow.get( "deviceManager" );
 			}
-
-
 			/**
 				"device": "dccbaa81-b2e4-46e4-a2f4-84d398dd86e3",
 				"type": "virtual",
@@ -94,6 +90,7 @@ module.exports = function ( RED ) {
 
 			// currently no path to delete devices.
 			node.on( "input", function ( msg ) {
+				var deviceManager = flow.get( "deviceManager" );
 				console.log( this );
 				let L = msg.payload[ 1 ];
 				msg.payload.length = 0;
