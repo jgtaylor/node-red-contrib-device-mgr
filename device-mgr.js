@@ -94,7 +94,7 @@ module.exports = function ( RED ) {
 				var flow = node.context()
 					.flow;
 				var deviceManager = flow.get( "deviceManager" );
-				console.log( this );
+				console.log( deviceManager );
 				let L = msg.payload[ 1 ];
 				msg.payload.length = 0;
 				L.forEach( function ( target ) {
