@@ -31,7 +31,8 @@ module.exports = function ( RED ) {
 							devConfig.device = guid();
 						}
 						node.log( "info", "Adding: " + devConfig.device );
-						return dm.devicesList.push( devConfig ) ? true : false;
+						dm.devicesList.push( devConfig );
+						return true;
 					}
 					return false;
 				};
