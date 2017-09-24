@@ -41,7 +41,8 @@ module.exports = function ( RED ) {
 					let exists = dm.devicesList.find( function ( sourceDev ) {
 						return devConfig.device === sourceDev.device;
 					} );
-					return exists ? exists : false;
+					// false means it exists, true: it's safe to insert.
+					return exists ? false : true;
 				};
 
 				// delete a device from the deviceManager
