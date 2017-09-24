@@ -31,13 +31,13 @@ module.exports = function ( RED ) {
 							devConfig.device = guid();
 						}
 						node.log( "info", "Adding: " + devConfig.device );
-						return node.deviceManager.devicesList.push( devConfig ) ? true : false;
+						return dm.devicesList.push( devConfig ) ? true : false;
 					}
 					return false;
 				};
 				// verify a supplied configuration for a devicesConfig
 				dm.verifyDevice = ( devConfig ) => {
-					let exists = node.deviceManager.find( function ( sourceDev ) {
+					let exists = dm.deviceManager.find( function ( sourceDev ) {
 						return devConfig.device === sourceDev.device;
 					} );
 					return exists ? exists : false;
@@ -45,11 +45,13 @@ module.exports = function ( RED ) {
 
 				// delete a device from the deviceManager
 				dm.removeDevice = ( deviceID ) => {
-					node.deviceManager.devicesList = node.deviceManager.devicesList.filter( function ( el ) {
+					dm.deviceManager.devicesList = dm.deviceManager.devicesList.filter( function ( el ) {
 						return el.device !== deviceID;
 					} );
 				};
 				flow.set( "deviceManager", dm );
+			} else {
+				var deviceManager = flow.get( "deviceManager" );
 			}
 
 
@@ -90,7 +92,6 @@ module.exports = function ( RED ) {
 			} ] ];
  			*/
 
-			var deviceManager = flow.get( "deviceManager" );
 			// currently no path to delete devices.
 			node.on( "input", function ( msg ) {
 				let L = msg.payload[ 1 ];
