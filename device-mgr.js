@@ -37,7 +37,7 @@ module.exports = function ( RED ) {
 				};
 				// verify a supplied configuration for a devicesConfig
 				dm.verifyDevice = ( devConfig ) => {
-					let exists = dm.deviceManager.devicesList.find( function ( sourceDev ) {
+					let exists = dm.devicesList.find( function ( sourceDev ) {
 						return devConfig.device === sourceDev.device;
 					} );
 					return exists ? exists : false;
@@ -45,7 +45,7 @@ module.exports = function ( RED ) {
 
 				// delete a device from the deviceManager
 				dm.removeDevice = ( deviceID ) => {
-					dm.deviceManager.devicesList = dm.deviceManager.devicesList.filter( function ( el ) {
+					dm.devicesList = dm.devicesList.filter( function ( el ) {
 						return el.device !== deviceID;
 					} );
 				};
