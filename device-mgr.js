@@ -1,61 +1,57 @@
+"use strict";
+var events = require( "events" );
+
+// generates a valid uuid
+function guid() {
+	return s4() + s4() + "-" + s4() + "-" + s4() + "-" +
+		s4() + "-" + s4() + s4() + s4();
+}
+
+// produces 4 byte string
+function s4() {
+	return Math.floor( ( 1 + Math.random() ) * 0x10000 )
+		.toString( 16 )
+		.substring( 1 );
+}
+
 module.exports = function ( RED ) {
-	"use strict";
-	var events = require( "events" );
 	RED.nodes.registerType( "device-mgr",
 		function ( config ) {
 			RED.nodes.createNode( this, config );
 			var node = this;
-			// generates a valid uuid
-			function guid() {
-				return s4() + s4() + "-" + s4() + "-" + s4() + "-" +
-					s4() + "-" + s4() + s4() + s4();
-			}
-
-			// produces 4 byte string
-			function s4() {
-				return Math.floor( ( 1 + Math.random() ) * 0x10000 )
-					.toString( 16 )
-					.substring( 1 );
-			}
-
-			// add a device to the deviceManager
-			function addDevice( devConfig ) {
-				if ( verifyDevice( devConfig ) ) {
-					// maybe put subscribe stuff here...?
-					if ( !devConfig.device ) {
-						devConfig.device = guid();
-					}
-					node.log( "info", "Adding: " + devConfig.device );
-					return node.deviceManager.devicesList.push( devConfig ) ? true : false;
-				}
-				return false;
-			}
-
-			// verify a supplied configuration for a devicesConfig
-			function verifyDevice( devConfig ) {
-				let exists = node.deviceManager.find( function ( sourceDev ) {
-					return devConfig.device === sourceDev.device;
-				} );
-				return exists ? exists : false;
-			}
-
-			// delete a device from the deviceManager
-			function removeDevice( deviceID ) {
-				node.deviceManager.devicesList = node.deviceManager.devicesList.filter( function ( el ) {
-					return el.device !== deviceID;
-				} );
-			}
-
-			var flow = this.context()
+			var flow = node.context()
 				.flow;
 			if ( !flow.get( "deviceManager" ) ) {
 				let dm = new events.EventEmitter();
 				dm.devicesList = [];
-				dm.addDevice = node.addDevice;
-				dm.removeDevice = node.removeDevice;
-				dm.verifyDevice = node.verifyDevice;
+				dm.addDevice = ( devConfig ) => {
+					if ( dm.verifyDevice( devConfig ) ) {
+						// maybe put subscribe stuff here...?
+						if ( !devConfig.device ) {
+							devConfig.device = guid();
+						}
+						node.log( "info", "Adding: " + devConfig.device );
+						return node.deviceManager.devicesList.push( devConfig ) ? true : false;
+					}
+					return false;
+				};
+				// verify a supplied configuration for a devicesConfig
+				dm.verifyDevice = ( devConfig ) => {
+					let exists = node.deviceManager.find( function ( sourceDev ) {
+						return devConfig.device === sourceDev.device;
+					} );
+					return exists ? exists : false;
+				};
+
+				// delete a device from the deviceManager
+				dm.removeDevice = ( deviceID ) => {
+					node.deviceManager.devicesList = node.deviceManager.devicesList.filter( function ( el ) {
+						return el.device !== deviceID;
+					} );
+				};
 				flow.set( "deviceManager", dm );
 			}
+
 
 			/**
 				"device": "dccbaa81-b2e4-46e4-a2f4-84d398dd86e3",
