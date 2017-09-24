@@ -37,7 +37,7 @@ module.exports = function ( RED ) {
 				};
 				// verify a supplied configuration for a devicesConfig
 				dm.verifyDevice = ( devConfig ) => {
-					let exists = dm.deviceManager.find( function ( sourceDev ) {
+					let exists = dm.deviceManager.devicesList.find( function ( sourceDev ) {
 						return devConfig.device === sourceDev.device;
 					} );
 					return exists ? exists : false;
