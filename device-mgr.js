@@ -1,6 +1,5 @@
 module.exports = function ( RED ) {
 	"use strict";
-	var util = require( "util" );
 	var events = require( "events" );
 	RED.nodes.registerType( "device-mgr",
 		function ( config ) {
