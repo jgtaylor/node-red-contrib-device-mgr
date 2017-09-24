@@ -94,6 +94,7 @@ module.exports = function ( RED ) {
 
 			// currently no path to delete devices.
 			node.on( "input", function ( msg ) {
+				console.log( this );
 				let L = msg.payload[ 1 ];
 				msg.payload.length = 0;
 				L.forEach( function ( target ) {
