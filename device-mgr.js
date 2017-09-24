@@ -25,20 +25,20 @@ module.exports = function ( RED ) {
 			let dm = new events.EventEmitter();
 			dm.devicesList = [];
 			dm.addDevice = ( devConfig ) => {
-				if ( node.verifyDevice( devConfig ) ) {
+				if ( dm.verifyDevice( devConfig ) ) {
 					// maybe put subscribe stuff here...?
 					if ( !devConfig.device ) {
 						devConfig.device = guid();
 					}
-					node.log( "info", "Adding: " + devConfig.device );
-					node.devicesList.push( devConfig );
+					dm.log( "info", "Adding: " + devConfig.device );
+					dm.devicesList.push( devConfig );
 					return true;
 				}
 				return false;
 			};
 			// verify a supplied configuration for a devicesConfig
 			dm.verifyDevice = ( devConfig ) => {
-				let exists = node.devicesList.find( function ( sourceDev ) {
+				let exists = dm.devicesList.find( function ( sourceDev ) {
 					return devConfig.device === sourceDev.device;
 				} );
 				// false means it exists, true: it's safe to insert.
@@ -47,14 +47,14 @@ module.exports = function ( RED ) {
 
 			// delete a device from the deviceManager
 			dm.removeDevice = ( deviceID ) => {
-				node.devicesList = node.devicesList.filter( function ( el ) {
+				dm.devicesList = dm.devicesList.filter( function ( el ) {
 					return el.device !== deviceID;
 				} );
 			};
 
 			//query a device
 			dm.queryDevice = ( deviceID ) => {
-				let d = node.devicesList.filter( ( el ) => {
+				let d = dm.devicesList.filter( ( el ) => {
 					return el.device === deviceID;
 				} );
 				if ( d.length === 1 ) {
