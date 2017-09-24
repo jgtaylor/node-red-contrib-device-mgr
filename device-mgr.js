@@ -50,13 +50,11 @@ module.exports = function ( RED ) {
 			var flow = this.context()
 				.flow;
 			if ( !flow.get( "deviceManager" ) ) {
-				let dm = {
-					devicesList: [],
-					addDevice: node.addDevice,
-					removeDevice: node.removeDevice,
-					verifyDevice: node.verifyDevice
-				};
-				util.inherits( dm, events.EventEmitter );
+				let dm = new events.EventEmitter();
+				dm.devicesList = [];
+				dm.addDevice = node.addDevice;
+				dm.removeDevice = node.removeDevice;
+				dm.verifyDevice = node.verifyDevice;
 				flow.set( "deviceManager", dm );
 			}
 
