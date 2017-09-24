@@ -14,7 +14,7 @@ function s4() {
 		.substring( 1 );
 }
 
-module.exports = function ( RED, deviceManager ) {
+module.exports = function ( RED ) {
 	RED.nodes.registerType( "device-mgr",
 		function ( config ) {
 			RED.nodes.createNode( this, config );
