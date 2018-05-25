@@ -1,5 +1,5 @@
 "use strict";
-var events = require( "events" );
+const WebSocketServer = require( "ws" );
 
 // generates a valid uuid
 function guid() {
@@ -15,30 +15,45 @@ function s4() {
 }
 
 module.exports = function ( RED ) {
-	RED.nodes.registerType( "device-mgr",
+	RED.nodes.registerType( "device-manager",
 		function ( config ) {
 			RED.nodes.createNode( this, config );
-
 			var node = this;
-			var flow = node.context()
-				.flow;
-			let dm = new events.EventEmitter();
-			dm.devicesList = [];
-			dm.addDevice = ( devConfig ) => {
-				if ( dm.verifyDevice( devConfig ) ) {
+			var devicesList = [];
+
+			/* create the WebSocket Server */
+			const wss = new WebSocketServer( {
+				port: config.port,
+				perMessageDeflate: false
+			} );
+			wss.on( "connection", function connection( ws, req ) {
+				/*
+				   parse the req for the path: /devices/:device,
+				   store the IP address for Network Updates later
+				*/
+				let location = url.parse( req.url, true ); // url.path, url.query
+				let clientIP = req.connection.remoteAddress;
+
+				ws.on( "message", function incoming( msg ) {
+
+					console.log( "msg = %s", msg );
+				} );
+			} );
+			var addDevice = ( devConfig ) => {
+				if ( node.verifyDevice( devConfig ) ) {
 					// maybe put subscribe stuff here...?
 					if ( !devConfig.device ) {
 						devConfig.device = guid();
 					}
 					node.log( "info", "Adding: " + devConfig.device );
-					dm.devicesList.push( devConfig );
+					node.devicesList.push( devConfig );
 					return true;
 				}
 				return false;
 			};
 			// verify a supplied configuration for a devicesConfig
-			dm.verifyDevice = ( devConfig ) => {
-				let exists = dm.devicesList.find( function ( sourceDev ) {
+			var verifyDevice = ( devConfig ) => {
+				let exists = devicesList.find( function ( sourceDev ) {
 					return devConfig.device === sourceDev.device;
 				} );
 				// false means it exists, true: it's safe to insert.
@@ -46,15 +61,15 @@ module.exports = function ( RED ) {
 			};
 
 			// delete a device from the deviceManager
-			dm.removeDevice = ( deviceID ) => {
-				dm.devicesList = dm.devicesList.filter( function ( el ) {
+			var removeDevice = ( deviceID ) => {
+				devicesList = devicesList.filter( function ( el ) {
 					return el.device !== deviceID;
 				} );
 			};
 
 			//query a device
-			dm.queryDevice = ( deviceID ) => {
-				let d = dm.devicesList.filter( ( el ) => {
+			var queryDevice = ( deviceID ) => {
+				let d = devicesList.filter( ( el ) => {
 					return el.device === deviceID;
 				} );
 				if ( d.length === 1 ) {
@@ -62,9 +77,6 @@ module.exports = function ( RED ) {
 				}
 			};
 
-			if ( !flow.get( "deviceManager" ) ) {
-				flow.set( "deviceManager", dm );
-			}
 			/**
 							"device": "dccbaa81-b2e4-46e4-a2f4-84d398dd86e3",
 							"type": "virtual",
