@@ -1,33 +1,36 @@
-<script type="text/x-red" data-template-name="device-mgr">
-	<div class="form-row">
-		<label for="node-input-topic"><i class="icon-tag"></i> Topic</label>
-		<input type="text" id="node-input-topic" placeholder="Topic">
-	</div>
+<script type="text/x-red" data-template-name="device-manager">
 	<div class="form-row">
 		<label for="node-input-name"><i class="icon-tag"></i> Name</label>
 		<input type="text" id="node-input-name" placeholder="Name">
 	</div>
+	<div class="form-row">
+		<label for="node-input-port"><i class="icon-tag"></i> Name</label>
+		<input type="text" id="node-input-port" placeholder="Port">
+	</div>
 
 </script>
-
-<script type="text/x-red" data-help-name="device-mgr">
-	<p>A simple node to create a flow level device list.</p>
+<script type="text/x-red" data-help-name="device-manager">
+	<p>Create a WebSocket for client devices to connect to.</p>
 </script>
-
 <script type="text/javascript">
-	RED.nodes.registerType('device-mgr', {
-		category: 'Taylor',
-		color: '#A6BBCF',
+	RED.nodes.registerType('device-manager', {
+		category: 'Paper Tiger Automatons',
+		color: '#C7E9C0',
 		defaults: {
 			name: {
 				value: ""
+			},
+			port: {
+				value: 8080,
+				required: true,
+				validate: RED.validators.number()
 			}
 		},
-		inputs: 1,
-		outputs: 1,
+		inputs: 0,
+		outputs: 0,
 		icon: "factory.png",
 		label: function() {
-			return this.name || "device-mgr";
+			return this.name || "device-manager";
 		}
 	});
 </script>
